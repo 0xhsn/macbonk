@@ -6,7 +6,7 @@ export const sshSteps: HardeningStep[] = [
     title: 'Install hardened SSH client config',
     description: 'Download and install a security-focused SSH client configuration',
     category: 'ssh',
-    commands: ['curl -sL https://raw.githubusercontent.com/drduh/config/main/ssh_config -o ~/.ssh/config'],
+    commands: ['mkdir -p ~/.ssh && chmod 700 ~/.ssh', 'curl -sL https://raw.githubusercontent.com/drduh/config/main/ssh_config -o ~/.ssh/config', 'chmod 600 ~/.ssh/config'],
     dangerLevel: 'medium',
     requiresSudo: false,
     warning: 'Overwrites existing ~/.ssh/config',
