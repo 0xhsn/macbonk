@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/macbonk.png" alt="macbonk" width="300">
+<img src="docs/macbonk.png?v=2" alt="macbonk" width="300">
 
 <h1>macbonk</h1>
 
