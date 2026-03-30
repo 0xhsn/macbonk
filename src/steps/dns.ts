@@ -1,0 +1,51 @@
+import type { HardeningStep } from '../types.ts';
+
+export const dnsSteps: HardeningStep[] = [
+  {
+    id: 'dns.hosts-blocklist',
+    title: 'Install StevenBlack hosts blocklist',
+    description: 'Block known ad/tracking/malware domains via /etc/hosts',
+    category: 'dns',
+    commands: ['curl -s https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts | sudo tee -a /etc/hosts > /dev/null'],
+    dangerLevel: 'medium',
+    requiresSudo: true,
+    warning: 'Appends thousands of blocked domains to /etc/hosts',
+  },
+  {
+    id: 'dns.install-dnscrypt',
+    title: 'Install DNSCrypt proxy',
+    description: 'Encrypt DNS queries using DNSCrypt protocol',
+    category: 'dns',
+    commands: ['brew install dnscrypt-proxy'],
+    dangerLevel: 'low',
+    requiresSudo: false,
+  },
+  {
+    id: 'dns.start-dnscrypt',
+    title: 'Start DNSCrypt service',
+    description: 'Start and enable DNSCrypt proxy as a service',
+    category: 'dns',
+    commands: ['sudo brew services restart dnscrypt-proxy'],
+    dangerLevel: 'medium',
+    requiresSudo: true,
+  },
+  {
+    id: 'dns.install-dnsmasq',
+    title: 'Install Dnsmasq',
+    description: 'Lightweight DNS forwarder with caching and DNSSEC support',
+    category: 'dns',
+    commands: ['brew install dnsmasq'],
+    dangerLevel: 'low',
+    requiresSudo: false,
+  },
+  {
+    id: 'dns.set-localhost',
+    title: 'Set DNS resolver to 127.0.0.1',
+    description: 'Route all DNS through local resolver (DNSCrypt/Dnsmasq)',
+    category: 'dns',
+    commands: ['sudo networksetup -setdnsservers "Wi-Fi" 127.0.0.1'],
+    dangerLevel: 'high',
+    requiresSudo: true,
+    warning: 'DNS will break if no local resolver is running. Ensure DNSCrypt or Dnsmasq is configured first.',
+  },
+];
