@@ -1,49 +1,14 @@
 <div align="center">
 
+<img src="docs/macbonk.png" alt="macbonk" width="300">
+
 <h1>macbonk</h1>
 
 <p>an interactive macOS security and privacy hardening CLI tool, built on top of <a href="https://github.com/drduh/macos-security-and-privacy-guide">drduh/macos-security-and-privacy-guide</a></p>
 
-<h3>
-  <a href="https://github.com/0xhsn/macbonk">GitHub</a> |
-  <a href="https://github.com/0xhsn/macbonk/issues">Issues</a>
-</h3>
-
-![GitHub stars](https://img.shields.io/github/stars/0xhsn/macbonk)
-![License](https://img.shields.io/github/license/0xhsn/macbonk)
-![macOS](https://img.shields.io/badge/macOS-only-000000?logo=apple)
-
 </div>
 
----
-
 This automation script operationalizes a curated set of hardening techniques for macOS security and privacy. The guide is targeted to power users who wish to adopt enterprise-standard security, but is also suitable for novice users with an interest in improving their privacy and security on a Mac.
-
-- 62 hardening steps across 11 categories
-- Interactive step-by-step walkthrough with apply/skip per item
-- `--yolo` flag to run everything without prompting
-- `--dry-run` mode to preview changes without touching anything
-- Built with [Ink](https://github.com/vadimdemedes/ink) (React for CLIs) and [Bun](https://bun.sh)
-
----
-
-## What it covers
-
-| Category | Steps | Description |
-|----------|-------|-------------|
-| System Hardening | 9 | `defaults write`, umask, hostname |
-| Firewall | 6 | ALF, stealth mode, pf kernel firewall |
-| DNS | 5 | Hosts blocklist, DNSCrypt, Dnsmasq |
-| Privoxy | 4 | Local filtering proxy |
-| Homebrew | 2 | Analytics, security settings |
-| SSH | 3 | Hardened client/server configuration |
-| Metadata Cleanup | 27 | Clear caches, history, artifacts |
-| Privacy | 1 | Browser hardening |
-| Encryption | 2 | GnuPG setup |
-| Monitoring | 1 | Audit and monitoring tools |
-| Verification | 2 | SIP, FileVault status checks |
-
----
 
 ## Installation
 
@@ -62,12 +27,11 @@ bun install
 bun bin/macbonk.ts
 ```
 
----
 
 ## Usage
 
 ```bash
-# Interactive mode — walk through each category and step
+# Interactive mode - walk through each category and step
 macbonk
 
 # Preview what would change without executing anything
@@ -86,7 +50,6 @@ macbonk --category firewall
 macbonk --list
 ```
 
----
 
 ## How it works
 
@@ -103,31 +66,50 @@ Each hardening recommendation from the [drduh guide](https://github.com/drduh/ma
 }
 ```
 
-Steps are grouped into categories. In interactive mode, you see each step with its description, danger level, and the actual command — then choose to **apply**, **skip**, **info**, or **quit**. A summary report is shown at the end.
+Steps are grouped into categories. In interactive mode, you see each step with its description, danger level, and the actual command - then choose to **apply**, **skip**, **info**, or **quit**. A summary report is shown at the end.
 
----
+- 62 hardening steps across 11 categories
+- Interactive step-by-step walkthrough with apply/skip per item
+- `--yolo` flag to run everything without prompting
+- `--dry-run` mode to preview changes without touching anything
+- Built with [Ink](https://github.com/vadimdemedes/ink) (React for CLIs) and [Bun](https://bun.sh)
+
+## What it covers
+
+| Category | Steps | Description |
+|----------|-------|-------------|
+| System Hardening | 9 | `defaults write`, umask, hostname |
+| Firewall | 6 | ALF, stealth mode, pf kernel firewall |
+| DNS | 5 | Hosts blocklist, DNSCrypt, Dnsmasq |
+| Privoxy | 4 | Local filtering proxy |
+| Homebrew | 2 | Analytics, security settings |
+| SSH | 3 | Hardened client/server configuration |
+| Metadata Cleanup | 27 | Clear caches, history, artifacts |
+| Privacy | 1 | Browser hardening |
+| Encryption | 2 | GnuPG setup |
+| Monitoring | 1 | Audit and monitoring tools |
+| Verification | 2 | SIP, FileVault status checks |
+
 
 ## Danger levels
 
-- **LOW** — safe, cosmetic, or informational changes
-- **MEDIUM** — functional changes that may affect behavior
-- **HIGH** — network/system changes that could break things if misconfigured
-- **CRITICAL** — destructive operations (e.g., locking directories with `chmod 000`)
+- **LOW** - safe, cosmetic, or informational changes
+- **MEDIUM** - functional changes that may affect behavior
+- **HIGH** - network/system changes that could break things if misconfigured
+- **CRITICAL** - destructive operations (e.g., locking directories with `chmod 000`)
 
 Steps marked HIGH or CRITICAL include a warning explaining the risk.
 
----
 
 ## Requirements
 
 - macOS (any version)
-- That's it — the install script handles everything else
+- That's it - the install script handles everything else
 
----
 
 ## Contributing
 
-PRs welcome. To add a new hardening step, create an entry in the appropriate file under `src/steps/`. Each step is just a TypeScript object — no code to write, just data.
+PRs welcome. To add a new hardening step, create an entry in the appropriate file under `src/steps/`. Each step is just a TypeScript object - no code to write, just data.
 
 **What makes a good step:**
 - Has a clear security or privacy benefit
@@ -140,8 +122,3 @@ PRs welcome. To add a new hardening step, create an entry in the appropriate fil
 bun test
 ```
 
----
-
-## License
-
-MIT
