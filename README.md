@@ -93,10 +93,12 @@ Steps are grouped into categories. In interactive mode, you see each step with i
 
 ## Danger levels
 
-- **LOW** - safe, cosmetic, or informational changes
-- **MEDIUM** - functional changes that may affect behavior
-- **HIGH** - network/system changes that could break things if misconfigured
-- **CRITICAL** - destructive operations (e.g., locking directories with `chmod 000`)
+| Level | Description |
+|-------|-------------|
+| LOW | Safe, cosmetic, or informational changes |
+| MEDIUM | Functional changes that may affect behavior |
+| HIGH | Network/system changes that could break things if misconfigured |
+| CRITICAL | Destructive operations (e.g., locking directories with `chmod 000`) |
 
 Steps marked HIGH or CRITICAL include a warning explaining the risk.
 
