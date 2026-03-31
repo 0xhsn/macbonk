@@ -18,11 +18,18 @@ const makeStep = (overrides: Partial<HardeningStep> = {}): HardeningStep => ({
 
 describe('executor', () => {
   test('dry run never executes commands', async () => {
-    const step = makeStep({ commands: ['rm -rf /'] });
+    const step = makeStep({ commands: ['echo dangerous-but-harmless'] });
     const result = await executeStep(step, true);
     expect(result.success).toBe(true);
     expect(result.stdout).toContain('Would execute');
     expect(result.durationMs).toBe(0);
+  });
+
+  test('blocks dangerous commands even in dry run', async () => {
+    const step = makeStep({ commands: ['rm -rf /'] });
+    const result = await executeStep(step, true);
+    expect(result.success).toBe(false);
+    expect(result.stderr).toContain('Blocked');
   });
 
   test('successful command returns success', async () => {

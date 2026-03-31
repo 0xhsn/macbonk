@@ -3,6 +3,7 @@ import { promisify } from 'node:util';
 import { copyFileSync, existsSync } from 'node:fs';
 import type { HardeningStep } from '../types.ts';
 import { log } from './logger.ts';
+import { validateStep } from './validate.ts';
 
 const run = promisify(exec);
 
@@ -38,6 +39,12 @@ function backupFiles(paths: string[]): string[] {
 
 export async function executeStep(step: HardeningStep, dryRun: boolean): Promise<ExecuteResult> {
   const joined = step.commands.join(' && ');
+
+  const validation = validateStep(step.commands);
+  if (!validation.valid) {
+    log(`[BLOCKED] ${step.id}: ${validation.reason}`);
+    return { success: false, stdout: '', stderr: `Blocked: ${validation.reason}`, durationMs: 0 };
+  }
 
   if (dryRun) {
     const backupMsg = step.backupPaths?.length ? `\nWould backup: ${step.backupPaths.join(', ')}` : '';
