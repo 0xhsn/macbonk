@@ -12,14 +12,20 @@ function Item({ label, isSelected = false }: { label: string; isSelected?: boole
 
 interface Props {
   categories: CategoryInfo[];
-  onSelect: (categoryId: StepCategory | 'all') => void;
+  onSelect: (categoryId: StepCategory | 'all' | 'resume') => void;
+  canResume?: boolean;
+  resumeInfo?: { currentIndex: number; queue: string[]; outcomes: unknown[] } | null;
 }
 
-export default function CategoryList({ categories, onSelect }: Props) {
+export default function CategoryList({ categories, onSelect, canResume, resumeInfo }: Props) {
   const items = [
+    ...(canResume && resumeInfo ? [{
+      label: `Resume previous session (${resumeInfo.outcomes.length}/${resumeInfo.queue.length} completed)`,
+      value: 'resume' as const,
+    }] : []),
     { label: `Run All (${categories.reduce((n, c) => n + c.steps.length, 0)} steps)`, value: 'all' as const },
     ...categories.map(c => ({
-      label: `${c.title} — ${c.steps.length} steps`,
+      label: `${c.title} - ${c.steps.length} steps`,
       value: c.id,
     })),
   ];
@@ -34,7 +40,7 @@ export default function CategoryList({ categories, onSelect }: Props) {
           items={items}
           indicatorComponent={Indicator}
           itemComponent={Item}
-          onSelect={(item: { value: StepCategory | 'all' }) => onSelect(item.value)}
+          onSelect={(item: { value: StepCategory | 'all' | 'resume' }) => onSelect(item.value)}
         />
       </Box>
     </Box>

@@ -59,5 +59,6 @@ export interface AppState {
 export type AppAction =
   | { type: 'START_ALL' }
   | { type: 'START_CATEGORY'; categoryId: StepCategory }
+  | { type: 'RESUME' }
   | { type: 'RECORD_OUTCOME'; outcome: StepOutcome }
   | { type: 'FINISH' };
