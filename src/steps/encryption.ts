@@ -19,5 +19,6 @@ export const encryptionSteps: HardeningStep[] = [
     dangerLevel: 'low',
     requiresSudo: false,
     warning: 'Overwrites existing ~/.gnupg/gpg.conf',
+    backupPaths: ['~/.gnupg/gpg.conf'],
   },
 ];

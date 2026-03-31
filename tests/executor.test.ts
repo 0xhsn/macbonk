@@ -1,4 +1,7 @@
-import { describe, test, expect, mock } from 'bun:test';
+import { describe, test, expect } from 'bun:test';
+import { writeFileSync, readFileSync, unlinkSync, existsSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { executeStep } from '../src/executor/executor.ts';
 import type { HardeningStep } from '../src/types.ts';
 
@@ -59,5 +62,31 @@ describe('executor', () => {
     const step = makeStep({ commands: ['sleep 0.1'] });
     const result = await executeStep(step, false);
     expect(result.durationMs).toBeGreaterThanOrEqual(50);
+  });
+
+  test('backup creates .macbonk.bak before execution', async () => {
+    const tmp = join(tmpdir(), `macbonk-test-${Date.now()}.txt`);
+    writeFileSync(tmp, 'original');
+    const step = makeStep({ commands: [`echo overwritten > ${tmp}`], backupPaths: [tmp] });
+    const result = await executeStep(step, false);
+    expect(result.success).toBe(true);
+    expect(result.backedUp).toContain(`${tmp}.macbonk.bak`);
+    expect(readFileSync(`${tmp}.macbonk.bak`, 'utf-8')).toBe('original');
+    unlinkSync(tmp);
+    unlinkSync(`${tmp}.macbonk.bak`);
+  });
+
+  test('backup skips nonexistent files', async () => {
+    const step = makeStep({ commands: ['echo ok'], backupPaths: ['/tmp/nonexistent-macbonk-file'] });
+    const result = await executeStep(step, false);
+    expect(result.success).toBe(true);
+    expect(result.backedUp).toHaveLength(0);
+  });
+
+  test('dry run mentions backups without creating them', async () => {
+    const step = makeStep({ commands: ['echo ok'], backupPaths: ['~/.ssh/config'] });
+    const result = await executeStep(step, true);
+    expect(result.stdout).toContain('Would backup');
+    expect(result.stdout).toContain('~/.ssh/config');
   });
 });

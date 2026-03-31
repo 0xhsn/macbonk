@@ -64,5 +64,6 @@ export const firewallSteps: HardeningStep[] = [
     dangerLevel: 'high',
     requiresSudo: true,
     warning: 'This modifies kernel-level packet filtering. Misconfiguration can break networking. A backup of pf.conf will be created.',
+    backupPaths: ['/etc/pf.conf'],
   },
 ];

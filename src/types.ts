@@ -26,6 +26,7 @@ export interface HardeningStep {
   guideRef?: string;
   dotfilesRef?: string;
   promptForValue?: { flag: string; prompt: string; default: string };
+  backupPaths?: string[];
 }
 
 export type StepResult = 'applied' | 'skipped' | 'failed';

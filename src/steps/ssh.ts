@@ -10,6 +10,7 @@ export const sshSteps: HardeningStep[] = [
     dangerLevel: 'medium',
     requiresSudo: false,
     warning: 'Overwrites existing ~/.ssh/config',
+    backupPaths: ['~/.ssh/config'],
   },
   {
     id: 'ssh.enable-sshd',
@@ -30,5 +31,6 @@ export const sshSteps: HardeningStep[] = [
     dangerLevel: 'high',
     requiresSudo: true,
     warning: 'Overwrites /etc/ssh/sshd_config — ensure you have an alternative way to access this machine',
+    backupPaths: ['/etc/ssh/sshd_config'],
   },
 ];
