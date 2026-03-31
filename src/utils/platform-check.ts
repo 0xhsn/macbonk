@@ -1,5 +1,8 @@
-import { platform, release, arch, hostname, cpus, totalmem } from 'node:os';
-import { execSync } from 'node:child_process';
+import { platform, arch, hostname, cpus, totalmem } from 'node:os';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const run = promisify(exec);
 
 export function assertMacOS() {
   if (platform() !== 'darwin') {
@@ -8,35 +11,36 @@ export function assertMacOS() {
   }
 }
 
-function getProductVersion(): string {
+async function shell(cmd: string, fallback: string): Promise<string> {
   try {
-    return execSync('sw_vers -productVersion', { encoding: 'utf-8' }).trim();
+    const { stdout } = await run(cmd, { timeout: 5000 });
+    return stdout.trim();
   } catch {
-    return release();
+    return fallback;
   }
 }
 
-function getProductName(): string {
-  try {
-    return execSync('sw_vers -productName', { encoding: 'utf-8' }).trim();
-  } catch {
-    return 'macOS';
-  }
+let _cached: string[] | null = null;
+let _prefetch: Promise<string[]> | null = null;
+
+async function fetchSystemInfo(): Promise<string[]> {
+  const [productName, productVersion, chip] = await Promise.all([
+    shell('sw_vers -productName', 'macOS'),
+    shell('sw_vers -productVersion', ''),
+    shell('sysctl -n machdep.cpu.brand_string', arch()),
+  ]);
+  const mem = `${Math.round(totalmem() / (1024 ** 3))} GB RAM`;
+  return [
+    `${productName} ${productVersion} (${arch()})`,
+    `${chip} · ${cpus().length} cores · ${mem}`,
+    `Host: ${hostname()}`,
+  ];
 }
 
-function getChipName(): string {
-  try {
-    return execSync('sysctl -n machdep.cpu.brand_string', { encoding: 'utf-8' }).trim();
-  } catch {
-    return arch();
-  }
+export function prefetchSystemInfo() {
+  if (!_prefetch) _prefetch = fetchSystemInfo().then(info => { _cached = info; return info; });
 }
 
 export function getSystemInfo(): string[] {
-  const mem = `${Math.round(totalmem() / (1024 ** 3))} GB RAM`;
-  return [
-    `${getProductName()} ${getProductVersion()} (${arch()})`,
-    `${getChipName()} · ${cpus().length} cores · ${mem}`,
-    `Host: ${hostname()}`,
-  ];
+  return _cached ?? [`macOS (${arch()})`, `${cpus().length} cores · ${Math.round(totalmem() / (1024 ** 3))} GB RAM`, `Host: ${hostname()}`];
 }

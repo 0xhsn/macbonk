@@ -1,6 +1,6 @@
 import meow from 'meow';
 import { render } from 'ink';
-import { assertMacOS } from './utils/platform-check.ts';
+import { assertMacOS, prefetchSystemInfo } from './utils/platform-check.ts';
 import { categories, allSteps } from './constants.ts';
 import App from './app.tsx';
 
@@ -31,6 +31,7 @@ const cli = meow(`
 });
 
 assertMacOS();
+prefetchSystemInfo();
 
 if (cli.flags.list) {
   for (const cat of categories) {
