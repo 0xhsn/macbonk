@@ -3,7 +3,7 @@ import { Text } from 'ink';
 import type { StepResult } from '../types.ts';
 
 const ICONS: Record<StepResult, string> = { applied: '✓', skipped: '–', failed: '✗' };
-const APPLIED = '#d7775a';
+const APPLIED = '#4EBA65';
 const SUBTLE = '#505050';
 const FLASH_MS = 300;
 

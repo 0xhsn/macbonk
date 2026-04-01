@@ -3,7 +3,7 @@ import type { StepOutcome } from '../types.ts';
 import { getLogPath } from '../executor/logger.ts';
 
 const SUBTLE = '#505050';
-const APPLIED = '#d7775a';
+const APPLIED = '#4EBA65';
 const ICONS = { applied: '✓', skipped: '–', failed: '✗' } as const;
 
 export default function Summary({ outcomes }: { outcomes: StepOutcome[] }) {
