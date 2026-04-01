@@ -9,6 +9,30 @@ const VERSION = '0.1.0';
 
 const DOGE = readFileSync(join(dirname(new URL(import.meta.url).pathname), '..', 'doge.txt'), 'utf-8').trimEnd().split('\n');
 
+function visualWidth(str: string): number {
+  let w = 0;
+  for (const ch of str) {
+    const code = ch.codePointAt(0)!;
+    if (
+      (code >= 0x1100 && code <= 0x115F) ||
+      (code >= 0x2E80 && code <= 0x303E) ||
+      (code >= 0x3040 && code <= 0x33BF) ||
+      (code >= 0x3400 && code <= 0x4DBF) ||
+      (code >= 0x4E00 && code <= 0x9FFF) ||
+      (code >= 0xF900 && code <= 0xFAFF) ||
+      (code >= 0xFE30 && code <= 0xFE6F) ||
+      (code >= 0xFF00 && code <= 0xFF60) ||
+      (code >= 0xFFE0 && code <= 0xFFE6) ||
+      (code >= 0x3000 && code <= 0x303F)
+    ) {
+      w += 2;
+    } else {
+      w += 1;
+    }
+  }
+  return w;
+}
+
 interface Props {
   dryRun: boolean;
   yolo: boolean;
@@ -34,7 +58,7 @@ export default function Welcome({ dryRun, yolo, onContinue }: Props) {
     { text: `${stepCount} steps · ${catCount} categories · ${sudoCount} require sudo` },
   ];
 
-  const maxLeft = Math.max(...DOGE.map(l => l.length));
+  const maxLeft = Math.max(...DOGE.map(visualWidth));
   const gap = 4;
 
   return (
@@ -44,7 +68,7 @@ export default function Welcome({ dryRun, yolo, onContinue }: Props) {
           <Box key="banner" flexDirection="column" marginTop={1}>
             {DOGE.map((line, i) => {
               const right = rightLines[i];
-              const pad = ' '.repeat(maxLeft - line.length + gap);
+              const pad = ' '.repeat(Math.max(0, maxLeft - visualWidth(line) + gap));
               return (
                 <Box key={i}>
                   <Text color="#F5A623">{line}</Text>
