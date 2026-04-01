@@ -6,15 +6,15 @@ import DryRunBadge from './DryRunBadge.tsx';
 const VERSION = '0.1.0';
 
 const DOGE = [
-  '　　 　　/＾>》, -―‐‐＜＾}',
-  '　　 　./    /,≠´        ヽ.',
-  '　　　/     〃      ／}  丿ハ',
-  '　　./      i{l|  ／　ﾉ／ }  }',
-  '　 /        瓜   イ＞　´＜ ,\'   ﾉ',
-  '  ./        |ﾉﾍ.{､ 　( ﾌ_ノﾉイ',
-  '  |         |　／}｀ｽ/￣￣￣￣/',
-  ' .|         |(_   つ/macbonk!/',
-  ' .￣￣￣￣￣       ＼/＿＿＿＿/￣￣',
+  '  /^>>, ---<^}',
+  ' ./   /,=\'       \\.',
+  ' /    ||     /}  ) h',
+  './     i{l| /  )/ }  }',
+  '/      @  =>  \'< ,\'  )',
+  './      |).{,  ( 7_))i',
+  '|      | /}` s/----/',
+  '.|     |(_  |/macbonk!/',
+  '.-----     \\/____/---',
 ];
 
 interface Props {
@@ -33,50 +33,58 @@ export default function Welcome({ dryRun, yolo, onContinue }: Props) {
   const catCount = categories.length;
   const sudoCount = allSteps.filter(s => s.requiresSudo).length;
 
+  const rightLines = [
+    { text: 'macbonk', bold: true },
+    { text: `v${VERSION}`, dim: true },
+    { text: '' },
+    ...info.map(line => ({ text: line, dim: true })),
+    { text: '' },
+    { text: `${stepCount} steps · ${catCount} categories · ${sudoCount} require sudo` },
+  ];
+
+  const maxLeft = Math.max(...DOGE.map(l => l.length));
+  const gap = 4;
+
   return (
     <Box flexDirection="column">
       <Static items={['banner']}>
         {() => (
-          <Box key="banner" flexDirection="column">
-            <Box
-              borderStyle="round"
-              borderColor="gray"
-              flexDirection="row"
-              paddingX={1}
-              paddingY={1}
-            >
-              <Box flexDirection="column" marginRight={2}>
-                {DOGE.map((line, i) => (
-                  <Text key={i} color="#F5A623">{line}</Text>
-                ))}
+          <Box key="banner" flexDirection="column" marginTop={1}>
+            {DOGE.map((line, i) => {
+              const right = rightLines[i];
+              const pad = ' '.repeat(maxLeft - line.length + gap);
+              return (
+                <Box key={i}>
+                  <Text color="#F5A623">{line}</Text>
+                  <Text>{pad}</Text>
+                  {right && <Text bold={right.bold} dimColor={right.dim}>{right.text}</Text>}
+                </Box>
+              );
+            })}
+            {rightLines.slice(DOGE.length).map((right, i) => (
+              <Box key={`r-${i}`}>
+                <Text>{' '.repeat(maxLeft + gap)}</Text>
+                <Text bold={right.bold} dimColor={right.dim}>{right.text}</Text>
               </Box>
+            ))}
 
-              <Box flexDirection="column" justifyContent="center">
-                <Text bold>macbonk</Text>
-                <Text dimColor>v{VERSION}</Text>
-                <Text>{''}</Text>
-                {info.map((line, i) => (
-                  <Text key={i} dimColor>{line}</Text>
-                ))}
-                <Text>{''}</Text>
-                <Text>{stepCount} steps · {catCount} categories · {sudoCount} require sudo</Text>
-                {dryRun && <DryRunBadge />}
-                {yolo && (
-                  <Box flexDirection="column">
-                    <Text color="red" bold>[YOLO]</Text>
-                    <Text color="red">⚠ All steps will run without prompting</Text>
-                  </Box>
-                )}
+            {dryRun && (
+              <Box marginTop={1} marginLeft={1}><DryRunBadge /></Box>
+            )}
+            {yolo && (
+              <Box marginTop={1} marginLeft={1} flexDirection="column">
+                <Text color="red" bold>[YOLO]</Text>
+                <Text color="red">⚠ All steps will run without prompting</Text>
               </Box>
-            </Box>
+            )}
 
             <Box marginLeft={1} marginTop={1} flexDirection="column">
-              <Text dimColor>This automation script operationalizes a curated set of hardening</Text>
-              <Text dimColor>techniques for macOS security and privacy. The guide is targeted to</Text>
-              <Text dimColor>power users who wish to adopt enterprise-standard security, but is</Text>
-              <Text dimColor>also suitable for novice users with an interest in improving their</Text>
-              <Text dimColor>privacy and security on a Mac.</Text>
-              <Text dimColor>https://github.com/drduh/macos-security-and-privacy-guide</Text>
+              <Text>This automation script operationalizes a curated set of hardening</Text>
+              <Text>techniques for macOS security and privacy. The guide is targeted to</Text>
+              <Text>power users who wish to adopt enterprise-standard security, but is</Text>
+              <Text>also suitable for novice users with an interest in improving their</Text>
+              <Text>privacy and security on a Mac.</Text>
+              <Text>https://github.com/drduh/macos-security-and-privacy-guide</Text>
             </Box>
           </Box>
         )}
