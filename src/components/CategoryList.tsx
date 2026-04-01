@@ -31,11 +31,11 @@ export default function CategoryList({ categories, onSelect, canResume, resumeIn
   ];
 
   return (
-    <Box flexDirection="column">
-      <Box marginBottom={1} marginLeft={2}>
+    <Box flexDirection="column" marginLeft={1}>
+      <Box marginBottom={1} marginLeft={1}>
         <Text bold>Select an option:</Text>
       </Box>
-      <Box marginLeft={2}>
+      <Box>
         <SelectInput
           items={items}
           indicatorComponent={Indicator}

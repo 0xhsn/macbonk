@@ -7,7 +7,7 @@ import DryRunBadge from './DryRunBadge.tsx';
 
 const VERSION = '0.1.0';
 
-const DOGE = readFileSync(join(dirname(new URL(import.meta.url).pathname), '..', 'doge.txt'), 'utf-8').trimEnd().split('\n');
+const DOGE = readFileSync(join(dirname(new URL(import.meta.url).pathname), '..', 'art.txt'), 'utf-8').trimEnd().split('\n');
 
 function visualWidth(str: string): number {
   let w = 0;
