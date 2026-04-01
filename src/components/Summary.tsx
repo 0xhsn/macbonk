@@ -11,24 +11,28 @@ export default function Summary({ outcomes }: { outcomes: StepOutcome[] }) {
 
   return (
     <Box flexDirection="column" marginTop={1}>
-      <Text bold>{'─'.repeat(50)}</Text>
-      <Text bold>Summary</Text>
-      <Box marginTop={1} gap={2}>
-        <Text>✓ Applied: {counts.applied}</Text>
-        <Text dimColor>– Skipped: {counts.skipped}</Text>
-        {counts.failed > 0 && <Text color="red">✗ Failed: {counts.failed}</Text>}
+      <Text dimColor>  {'─'.repeat(50)}</Text>
+      <Text bold>  Summary</Text>
+      <Box marginTop={1} marginLeft={2} gap={1}>
+        <Text>✓ {counts.applied} applied</Text>
+        <Text dimColor>·</Text>
+        <Text dimColor>– {counts.skipped} skipped</Text>
+        {counts.failed > 0 && <><Text dimColor>·</Text><Text color="red">✗ {counts.failed} failed</Text></>}
       </Box>
       <Box marginTop={1} flexDirection="column">
         {outcomes.map((o, i) => (
-          <Box key={i} gap={1}>
+          <Box key={i} gap={1} marginLeft={2}>
             <Text color={o.result === 'failed' ? 'red' : undefined} dimColor={o.result === 'skipped'}>{ICONS[o.result]}</Text>
             <Text color={o.result === 'failed' ? 'red' : undefined} dimColor={o.result === 'skipped'}>{o.step.title}</Text>
-            {o.durationMs > 0 && <Text dimColor>({o.durationMs}ms)</Text>}
+            {o.durationMs > 0 && <Text dimColor>{o.durationMs}ms</Text>}
           </Box>
         ))}
       </Box>
-      <Box marginTop={1}>
-        <Text dimColor>Total time: {(totalMs / 1000).toFixed(1)}s — Log: {getLogPath()}</Text>
+      <Text dimColor>  {'─'.repeat(50)}</Text>
+      <Box marginLeft={2} gap={1}>
+        <Text dimColor>{(totalMs / 1000).toFixed(1)}s total</Text>
+        <Text dimColor>·</Text>
+        <Text dimColor>{getLogPath()}</Text>
       </Box>
     </Box>
   );
