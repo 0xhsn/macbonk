@@ -4,8 +4,8 @@ import type { DangerLevel } from '../types.ts';
 const COLORS: Record<DangerLevel, string | undefined> = {
   low: undefined,
   medium: '#F5A623',
-  high: 'red',
-  critical: 'red',
+  high: '#FF6B80',
+  critical: '#FF6B80',
 };
 
 export default function DangerBadge({ level }: { level: DangerLevel }) {
