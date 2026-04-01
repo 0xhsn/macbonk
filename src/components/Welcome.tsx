@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 import { Box, Text, Static, useInput } from 'ink';
 import { getSystemInfo } from '../utils/platform-check.ts';
 import { allSteps, categories } from '../constants.ts';
@@ -5,17 +7,7 @@ import DryRunBadge from './DryRunBadge.tsx';
 
 const VERSION = '0.1.0';
 
-const DOGE = [
-  '　　　 　　/＾>》, -―‐‐＜＾}',
-  '　　　 　./    /,≠´        ヽ.',
-  '　　　　/     〃      ／}  丿ハ',
-  '　　　./      i{l|  ／　ﾉ／ }  }',
-  '　　 /        瓜   イ＞　´＜ ,\'    ﾉ',
-  '　 ./        |ﾉﾍ.{､ 　( ﾌ_ノﾉイ',
-  '　 |         |　／}｀ｽ/￣￣￣￣/',
-  '.　|         |(_   つ/    /　',
-  '.￣￣￣￣￣       ＼/＿＿＿＿/￣￣￣',
-];
+const DOGE = readFileSync(join(dirname(new URL(import.meta.url).pathname), '..', 'doge.txt'), 'utf-8').trimEnd().split('\n');
 
 interface Props {
   dryRun: boolean;
