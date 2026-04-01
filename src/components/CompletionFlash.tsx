@@ -3,6 +3,8 @@ import { Text } from 'ink';
 import type { StepResult } from '../types.ts';
 
 const ICONS: Record<StepResult, string> = { applied: '✓', skipped: '–', failed: '✗' };
+const APPLIED = '#d7775a';
+const SUBTLE = '#505050';
 const FLASH_MS = 300;
 
 export default function CompletionFlash({ result, title, durationMs }: { result: StepResult; title: string; durationMs: number }) {
@@ -15,14 +17,15 @@ export default function CompletionFlash({ result, title, durationMs }: { result:
 
   const isFail = result === 'failed';
   const isSkip = result === 'skipped';
+  const isApplied = result === 'applied';
 
   return (
     <Text
-      color={isFail ? 'red' : undefined}
+      color={isFail ? 'red' : isApplied && flash ? APPLIED : isSkip ? SUBTLE : undefined}
       dimColor={isSkip && !flash}
-      bold={flash && !isSkip}
+      bold={flash && isApplied}
     >
-      {ICONS[result]} {title}{durationMs > 0 ? ` (${durationMs}ms)` : ''}
+      {ICONS[result]} {title}{durationMs > 0 ? ` ${durationMs}ms` : ''}
     </Text>
   );
 }

@@ -58,7 +58,7 @@ export default function StepRunner({ step, dryRun, yolo, onOutcome }: Props) {
 
   return (
     <Box flexDirection="column" marginTop={1}>
-      <Text dimColor>  {'─'.repeat(50)}</Text>
+      <Text color="#505050">  {'─'.repeat(50)}</Text>
       <Box flexDirection="column" paddingLeft={2}>
         <Box gap={1}>
           <DangerBadge level={step.dangerLevel} />

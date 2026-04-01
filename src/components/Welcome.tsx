@@ -40,7 +40,7 @@ export default function Welcome({ dryRun, yolo, onContinue }: Props) {
           <Box key="banner" flexDirection="column">
             <Box
               borderStyle="round"
-              borderColor="#F5A623"
+              borderColor="gray"
               flexDirection="row"
               paddingX={1}
               paddingY={1}
