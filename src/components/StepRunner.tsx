@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
-import Spinner from 'ink-spinner';
 import type { HardeningStep, StepOutcome } from '../types.ts';
 import { executeStep } from '../executor/executor.ts';
 import { useElapsed, formatElapsed } from '../hooks/useElapsed.ts';
@@ -9,10 +8,9 @@ import SudoBadge from './SudoBadge.tsx';
 import DryRunBadge from './DryRunBadge.tsx';
 import CommandPreview from './CommandPreview.tsx';
 import ErrorDisplay from './ErrorDisplay.tsx';
+import SpinnerAnim from './SpinnerAnim.tsx';
 
 type Phase = 'prompt' | 'executing' | 'done';
-
-const STALL_THRESHOLD = 10_000;
 
 interface Props {
   step: HardeningStep;
@@ -26,7 +24,7 @@ export default function StepRunner({ step, dryRun, yolo, onOutcome }: Props) {
   const [showInfo, setShowInfo] = useState(false);
   const [error, setError] = useState('');
   const elapsed = useElapsed(phase === 'executing');
-  const stalled = elapsed > STALL_THRESHOLD;
+  const stalled = elapsed > 10_000;
 
   useEffect(() => {
     if (phase !== 'executing') return;
@@ -61,12 +59,12 @@ export default function StepRunner({ step, dryRun, yolo, onOutcome }: Props) {
   return (
     <Box flexDirection="column" marginTop={1}>
       <Text dimColor>  {'─'.repeat(50)}</Text>
-      <Box borderStyle="round" borderTop={true} borderBottom={false} borderLeft={false} borderRight={false} flexDirection="column" paddingLeft={1}>
+      <Box flexDirection="column" paddingLeft={2}>
         <Box gap={1}>
           <DangerBadge level={step.dangerLevel} />
           {step.requiresSudo && <SudoBadge />}
           {dryRun && <DryRunBadge />}
-          <Text bold> {step.title}</Text>
+          <Text bold>{step.title}</Text>
         </Box>
         <Box marginLeft={2}>
           <Text dimColor>{step.description}</Text>
@@ -90,9 +88,7 @@ export default function StepRunner({ step, dryRun, yolo, onOutcome }: Props) {
         )}
         {phase === 'executing' && (
           <Box marginLeft={2} gap={1}>
-            <Text color={stalled ? 'red' : undefined}>
-              <Spinner type="dots" />
-            </Text>
+            <SpinnerAnim elapsed={elapsed} />
             <Text dimColor={!stalled} color={stalled ? 'red' : undefined}>
               {stalled ? 'Still running...' : 'Executing...'}
             </Text>

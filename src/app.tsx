@@ -8,6 +8,7 @@ import CategoryList from './components/CategoryList.tsx';
 import StepRunner from './components/StepRunner.tsx';
 import ProgressBar from './components/ProgressBar.tsx';
 import Summary from './components/Summary.tsx';
+import CompletionFlash from './components/CompletionFlash.tsx';
 
 function resolveQueue(ids: string[]): HardeningStep[] {
   return ids.map(id => allSteps.find(s => s.id === id)).filter(Boolean) as HardeningStep[];
@@ -123,6 +124,11 @@ export default function App({ dryRun, yolo, filterCategory }: Props) {
             total={state.queue.length}
             label={currentCategory?.title ?? currentStep.category}
           />
+          {state.outcomes.slice(-3).map((o, i) => (
+            <Box key={`done-${i}`} marginLeft={2}>
+              <CompletionFlash result={o.result} title={o.step.title} durationMs={o.durationMs} />
+            </Box>
+          ))}
           <StepRunner
             key={currentStep.id}
             step={currentStep}
